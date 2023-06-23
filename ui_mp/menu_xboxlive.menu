@@ -1,0 +1,63 @@
+#include "ui_mp/includes/menudef.h"
+#include "ui_mp/includes/macros.h"
+
+#include "ui_mp/includes/widgets/back_button.h"
+#include "ui_mp/includes/widgets/choice_button.h"
+#include "ui_mp/includes/widgets/choice_separator.h"
+
+#define MENU_NAME		"menu_xboxlive"
+#define MENU_TITLE		"MULTIPLAYER"
+#define MENU_BACKGROUND	"mw2_main_co_image"
+
+menuDef
+{
+	name 				MENU_NAME
+	rect 				0 0 640 480 4 4;
+	focuscolor			1 1 1 1
+	soundloop			"music_mainmenu_mp"
+	onEsc
+	{
+		close "self";
+		open "main_text";
+	}
+	
+	#include "ui_mp/includes/background.h"
+	#include "ui_mp/includes/widgets/playercard.h"
+
+	CHOICE_SEPARATOR( 0, 1 )
+	CHOICE_BUTTON( 0, "BROWSE SERVERS", exec "xrequirelivesignin"; open "pc_join_unranked", 1 )
+	CHOICE_BUTTON( 1, "PRIVATE MATCH", CREATE_GAME_ACTION, 1 )
+	CHOICE_BUTTON( 2, "CREATE A CLASS", open "cac_popup", 1 )
+	CHOICE_BUTTON( 3, "PLAYERCARD", setLocalVarString "ui_maintext_submenu" ( "PLAYERCARD" ); open "playercard_submenu";, localVarString( "ui_maintext_submenu" ) == "" || localVarString( "ui_maintext_submenu" ) == "PLAYERCARD" )
+	CHOICE_SEPARATOR( 4, localVarString( "ui_maintext_submenu" ) == "" )
+
+	BACK_BUTTON( close "self"; open "main_text", 1 )
+}
+
+menuDef
+{
+	name 				"playercard_submenu"
+	rect 				0 0 640 480 4 4;
+	focuscolor			1 1 1 1
+	popup
+	onOpen
+	{
+		lerp x "from" -300 "to" 0 "over" 0.2;
+		lerp alpha "from" 0 "to" 1 "over" 0.2;
+	}
+	onClose
+	{
+		setLocalVarString "ui_maintext_submenu" ( "" );
+	}
+	onEsc
+	{
+		close "self";
+	}
+	CREATE_SHADER_EX( 200 0 2560 480 4 4, "white", 0 0 0 0.35, 1, border 1;
+			bordersize 0.5;
+			bordercolor 1 1 1 0.1 )
+
+	CHOICE_SEPARATOR( 3, localVarString( "ui_maintext_submenu" ) == "PLAYERCARD" )
+	CHOICE_BUTTON( 4, "CHANGE NAME", open "popup_playername", 1 )
+	CHOICE_BUTTON( 5, "CHANGE TITLE", open "popup_customtitle", 1 )
+}

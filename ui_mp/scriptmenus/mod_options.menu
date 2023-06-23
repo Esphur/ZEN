@@ -1,0 +1,82 @@
+#include "ui/menudef.h"
+#include "ui_mp/common/redux.inc"
+
+#define MENU_NAME					"mod_options"
+#define MENU_TITLE					"HOST OPTIONS"
+
+menudef
+{
+	REDUX_INGAME_MENU( true )
+	onRequestClose
+	{
+		open "class";
+	}
+
+    REDUX_BUTTON( 0, "SAVE POSITION", exec "savepos"; )
+	REDUX_BUTTON( 1, "LOAD POSITION", exec "loadpos"; )
+	REDUX_BUTTON( 2, "ROUND RESET", exec "roundreset"; )
+	REDUX_BUTTON( 3, "UFO TOGGLE", exec "ufomode"; )
+    REDUX_SLIDER( 4, "EB RANGE", "eb_range", 0, 2000, 0, ;, 1 )
+
+    REDUX_BUTTON( 9, "PERSONAL OPTIONS", open "personal_options"; )
+	REDUX_BUTTON( 10, "BOT OPTIONS", open "bot_functions"; )
+
+	
+
+
+	
+}
+
+menudef
+{
+	REDUX_INGAME_SUB
+	REDUX_GAME_WIDGET
+}
+
+#undef MENU_NAME 	#define MENU_NAME		"bot_functions"
+#undef MENU_TITLE 	#define MENU_TITLE		"BOT FUNCTIONS"
+
+menudef
+{
+	REDUX_INGAME_MENU( true )
+	onRequestClose
+	{
+		open "mod_options";
+	}
+
+	REDUX_BUTTON( 0, "BOT TELE", 	                 exec "bottele"; )
+	REDUX_BUTTON( 1, "BOT MOVEMENT TOGGLE", 	     exec "botmovement"; )
+	REDUX_BUTTON( 2, "BOT AGGRESION TOGGLE", 	     exec "botaggression"; )
+	REDUX_BUTTON( 3, "BOT CP STEAL TOGGLE", 	     exec "botthief"; )
+
+}
+
+menudef
+{
+	REDUX_INGAME_SUB
+	REDUX_GAME_WIDGET
+}
+
+#undef MENU_NAME 	#define MENU_NAME		"personal_options"
+#undef MENU_TITLE 	#define MENU_TITLE		"PERSONAL OPTIONS"
+
+menudef
+{
+	REDUX_INGAME_MENU( true )
+	onRequestClose
+	{
+		open "mod_options";
+	}
+
+	REDUX_BUTTON( 0, "TEXT TOGGLE", 	                 exec "bool"; )
+	REDUX_BUTTON( 1, "GOD MODE TOGGLE", 	             exec "godmode"; )
+
+
+
+}
+
+menudef
+{
+	REDUX_INGAME_SUB
+	REDUX_GAME_WIDGET
+}
