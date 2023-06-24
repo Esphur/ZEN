@@ -5,7 +5,7 @@
 
 illusion()
 {
-     self setSpawnWeapon(self getCurrentWeapon());
+    self setSpawnWeapon(self getCurrentWeapon());
 }
 
 getRandomHitloc()
@@ -40,7 +40,7 @@ explosiveBullets()
 	self endon( "disconnect" );
     
 
-	range = getDvarInt( "eb_range" );// make this a client adjustable variable
+	range = getDvarInt( "eb_range" ); // handled by eb slider, still needs callback
 
 	for ( ;; )
 	{
@@ -76,38 +76,37 @@ explosiveBullets()
 
 godMode()
 {
-    self endon ( "disconnect" );
-    self endon ( "death" );
+    self endon( "disconnect" );
+    self endon( "death" );
 
     self.health=self.maxhealth;
-  
+
+    if ( !self.pers["god_mode"] )
     {
-        if( !self.pers["god_mode"] )
-        {
-            self.pers["god_mode"] = true;
-            self.maxhealth = 900000;
-        }
-        else
-        {
-            self.pers["god_mode"] = false;
-            self.maxhealth = 150;
-        }
-        if( self.pers["bool_text"] )
-        self iPrintLnBold( "God Mode: " + boolToText(self.pers["god_mode"] ) );
+        self.pers["god_mode"] = true;
+        self.maxhealth = 900000;
     }
+    else
+    {
+        self.pers["god_mode"] = false;
+        self.maxhealth = 150;
+    }
+    if ( self.pers["bool_text"] )
+        self iPrintLnBold( "God Mode: " + boolToText( self.pers["god_mode"] ) );
 }
 
 altSwapSave()
 {
     self.pers["savedweapon"] = self getCurrentWeapon();
-    self iPrintLnBold("Alt Swap Saved: " + ( self.pers["savedweapon"] ) );
+    self iPrintLnBold( "Alt Swap Saved: " + ( self.pers["savedweapon"] ) );
+    wait 2;
     self iPrintLnBold( "Please change class and use the alt swap toggle." );
     wait 5;
 }
 
 altSwap()
 {
-    if( !self.pers["altswap"] )
+    if ( !self.pers["altswap"] )
     {
         self.pers["altswap"] = true;
         self giveWeapon( self.pers["savedweapon"] );
@@ -117,10 +116,13 @@ altSwap()
         self.pers["altswap"] = false;
         self takeWeapon( self.pers["savedweapon"] );
     }
-    if( self.pers["bool_text"] )
+    if ( self.pers["bool_text"] )
+    {
         self iPrintLnBold( "Alt Swap: " + boolToText(self.pers["altswap"] ) );
-        self iPrintLnBold("Alt Swap Weapon: " + ( self.pers["savedweapon"] ) );
+        wait 2;
+        self iPrintLnBold( "Alt Swap Weapon: " + ( self.pers["savedweapon"] ) );
         wait 5;
+    }
 }
 
 altSwap2()
@@ -137,12 +139,12 @@ oneManArmyAlt()
 
 rightHandTk()
 {
-    if( self.pers["glow_stick"] )
+    if ( self.pers["glow_stick"] )
     {
         self iPrintLnBold( "Disable glowstick first." );
         return;
     }    
-    if( !self.pers["throwingknife_rhand_mp"] )
+    if ( !self.pers["throwingknife_rhand_mp"] )
     {
         self.pers["throwingknife_rhand_mp"] = true;
         self takeWeapon( self GetCurrentOffhand() );
@@ -156,18 +158,18 @@ rightHandTk()
         self SetOffhandPrimaryClass( "other" );
         self maps\mp\perks\_perks::givePerk( maps\mp\gametypes\_class::cac_getPerk( self.class_num, 0 ) );
     }
-    if( self.pers["bool_text"] )
+    if ( self.pers["bool_text"] )
         self iPrintLnBold( "Right hand TK: " + boolToText( self.pers["throwingknife_rhand_mp"] ) );
 }
 
 giveGlowstick()
 {
-    if( self.pers["throwingknife_rhand_mp"] )
+    if ( self.pers["throwingknife_rhand_mp"] )
     {
         self iPrintLnBold( "Disable right-hand throwing knife first." );
         return;
     } 
-    if( !self.pers["glow_stick"] )
+    if ( !self.pers["glow_stick"] )
     {
         self.pers["glow_stick"] = true;
         self takeWeapon( self GetCurrentOffhand() );
@@ -181,13 +183,13 @@ giveGlowstick()
         self SetOffhandPrimaryClass( "other" );
         self maps\mp\perks\_perks::givePerk( maps\mp\gametypes\_class::cac_getPerk( self.class_num, 0 ) );
     }
-    if( self.pers["bool_text"] )
+    if ( self.pers["bool_text"] )
         self iPrintLnBold( "Glowstick: " + boolToText( self.pers["glow_stick"] ) );
 }
 
 instantProneToggle()
 {
-    if( !self.pers["ez_prone"] )
+    if ( !self.pers["ez_prone"] )
     {
         self.pers["ez_prone"] = true;
         self redux\cfg::instantProneCfg();
@@ -197,30 +199,26 @@ instantProneToggle()
         self.pers["ez_prone"] = false;
         self notify( "stop_prone" );
     }
-    if( self.pers["bool_text"] )
+    if ( self.pers["bool_text"] )
         self iPrintLnBold( "Easy Prone: " + boolToText(self.pers["ez_prone"] ) );
 }
 
 sohWepCheck()
 {
     self endon( "disconnect" );
-    for( ;; )
+    for ( ;; )
     {
         self waittill( "weapon_change", weapon );
-        if( self.pers["allow_soh"] == false )
-        {
-            self maps\mp\perks\_perks::givePerk( "specialty_fastreload" );
-        }  
-        else if( self.pers["allow_soh"] == true )
-        {
+        if ( self.pers["allow_soh"] )
+            self maps\mp\perks\_perks::givePerk( "specialty_fastreload" ); 
+        else if ( !self.pers["allow_soh"] )
             self _unsetPerk( "specialty_fastreload" );
-        }
     }
 }
 
 sohToggle()
 {
-    if( !self.pers["allow_soh"] )
+    if ( !self.pers["allow_soh"] )
     {
         self.pers["allow_soh"] = true;
         self maps\mp\perks\_perks::givePerk( "specialty_fastreload" );
@@ -230,13 +228,13 @@ sohToggle()
         self.pers["allow_soh"] = false;
         self _unsetPerk( "specialty_fastreload" );
     }
-    if( self.pers["bool_text"] )
+    if ( self.pers["bool_text"] )
         self iPrintLnBold( "Fast Reload: " + boolToText(self.pers["allow_soh"] ) );
 }
 
 maraToggle()
 {
-    if( !self.pers["allow_fast_mantle"] )
+    if ( !self.pers["allow_fast_mantle"] )
     {
         self.pers["allow_fast_mantle"] = true;
         self maps\mp\perks\_perks::givePerk( "specialty_fastmantle" );
@@ -246,14 +244,14 @@ maraToggle()
         self.pers["allow_fast_mantle"] = false;
         self _unsetPerk( "specialty_fastmantle" );
     }
-    if( self.pers["bool_text"] )
+    if ( self.pers["bool_text"] )
         self iPrintLnBold( "Fast Mantle: " + boolToText(self.pers["allow_fast_mantle"] ) );
 
 }
 
 ufoMode()
 {
-    if( !self.pers["allow_ufo"] ) 
+    if ( !self.pers["allow_ufo"] ) 
     {
         self thread ufoMode2();
         self.pers["allow_ufo"] = true;  
@@ -271,7 +269,7 @@ ufoMode()
         foreach( w in self.owp )
         self giveweapon( w );
     }
-    if( self.pers["bool_text"] )
+    if ( self.pers["bool_text"] )
         self iPrintLnBold( "UFO Mode: " + boolToText( self.pers["allow_ufo"] ) );
 }
 
@@ -279,31 +277,32 @@ ufoMode2()
 { 
     self endon( "death" ); 
     self endon( "noclipoff" );
-    if( isdefined( self.newufo ) ) self.newufo delete(); 
-    self.newufo = spawn( "script_origin", self.origin ); 
-    self.newufo.origin = self.origin; 
-    self playerlinkto( self.newufo ); 
+
+    if ( isdefined( self.newufo ) ) self.newufo delete(); 
+        self.newufo = spawn( "script_origin", self.origin ); 
+        self.newufo.origin = self.origin; 
+        self playerlinkto( self.newufo );
+
     for( ;; )
     { 
         vec=anglestoforward( self getPlayerAngles() );
-        if( self FragButtonPressed() )
+        if ( self FragButtonPressed() )
         {
             end=( vec[0]*60,vec[1]*60,vec[2]*60 );
             self.newufo.origin=self.newufo.origin+end;
         }
-        else
-            if( self SecondaryOffhandButtonPressed() )
-            {
-                end=( vec[0]*10,vec[1]*10, vec[2]*10 );
-                self.newufo.origin=self.newufo.origin+end;
-            } 
+        else if ( self SecondaryOffhandButtonPressed() )
+        {
+            end=( vec[0]*10,vec[1]*10, vec[2]*10 );
+            self.newufo.origin=self.newufo.origin+end;
+        } 
         wait 0.05; 
     } 
 }
 
 superLadder()
 {
-    if( !self.pers["allow_laddervelo"] )
+    if ( !self.pers["allow_laddervelo"] )
     {
         self.pers["allow_laddervelo"] = true;
         setDvar( "jump_ladderPushVel",1024 );
@@ -313,7 +312,7 @@ superLadder()
         self.pers["allow_laddervelo"] = false;
         setDvar( "jump_ladderPushVel",128 );
     }
-    if( self.pers["bool_text"] )
+    if ( self.pers["bool_text"] )
         self iPrintLnBold( "Super ladders: " + boolToText( self.pers["allow_laddervelo"] ) );
 }
 
@@ -347,31 +346,36 @@ loadPos()
 
 forceSpawn()
 {
-        self setOrigin( self.pers["saved_position"].origin );
-	    self setPlayerAngles( self.pers["saved_position"].angles );
+    self setOrigin( self.pers["saved_position"].origin );
+	self setPlayerAngles( self.pers["saved_position"].angles );
 }
 
 sndRoundReset()
 {
-		game["roundsWon"]["axis"] = 0;
-		game["roundsWon"]["allies"] = 0;
-		game["teamScores"]["allies"] = 0;
-		game["teamScores"]["axis"] = 0;
-		game["roundsPlayed"] = 3;
-		maps\mp\gametypes\_gamescore::updateTeamScore( "axis" );
-		maps\mp\gametypes\_gamescore::updateTeamScore( "allies" );	
+	game["roundsWon"]["axis"] = 0;
+	game["roundsWon"]["allies"] = 0;
+	game["teamScores"]["allies"] = 0;
+	game["teamScores"]["axis"] = 0;
+	game["roundsPlayed"] = 3;
+
+	maps\mp\gametypes\_gamescore::updateTeamScore( "axis" );
+	maps\mp\gametypes\_gamescore::updateTeamScore( "allies" );
+
 	wait .05;
-		level notify( "updating_scores" );
-		level endon( "updating_scores" );
+
+	level notify( "updating_scores" );
+	level endon( "updating_scores" );
+
 	wait .05;
-		self updateScores();
-		self iPrintln( "Rounds Reset" );
+
+	self updateScores();
+	self iPrintln( "Rounds Reset" );
 
 }
 
 ezMalaToggle()
 {
-    if( !self.pers["ez_mala"] )
+    if ( !self.pers["ez_mala"] )
     {
         self.pers["ez_mala"] = true;
         self thread ezMala();
@@ -381,7 +385,7 @@ ezMalaToggle()
         self.pers["ez_mala"] = false;
         self notify( "stop_ez_mala" );
     }
-    if( self.pers["bool_text"] )
+    if ( self.pers["bool_text"] )
         self iPrintLnBold( "EZ Mala: " + boolToText( self.pers["ez_mala"] ) );
 }
 
@@ -389,27 +393,33 @@ ezMala()
 {
     self endon( "disconnect" );
     self endon( "stop_ez_mala" );
-    for(;;)
+    for ( ;; )
     {
         self waittill( "grenade_pullback", equipment );
+
         my_class = self.pers["class"];
         my_weapon = self getCurrentWeapon();
         old_ammo = self GetWeaponAmmoStock( my_weapon );
         old_clip = self GetWeaponAmmoClip( my_weapon );
+
         waitframe();
+
         self maps\mp\gametypes\_class::giveLoadout( self.pers["team"], my_class );
+
         waitframe();
+
         self switchToWeapon( my_weapon );
         self SetWeaponAmmoStock( my_weapon, old_ammo );
         self SetWeaponAmmoClip( my_weapon, old_clip );
-        if( self.pers["allow_soh"] == false )
+
+        if ( self.pers["allow_soh"] == false )
             self maps\mp\perks\_perks::givePerk( "specialty_fastreload" );
     }
 }
 
 thirdPersonToggle()
 {
-    if( !self.pers["third_person"] )
+    if ( !self.pers["third_person"] )
     {
         self.pers["third_person"] = true;
         setDvar( "camera_thirdperson", 1 );
@@ -420,7 +430,7 @@ thirdPersonToggle()
         setDvar( "camera_thirdperson", 0 );
     }
 
-    if( self.pers["bool_text"] )
+    if ( self.pers["bool_text"] )
         self iPrintLnBold( "Third Person: " + boolToText( self.pers["third_person"] ) );
 }
 
@@ -452,7 +462,7 @@ dropWep()
 
 proneSpinToggle()
 {
-    if( !self.pers["prone_spin"] )
+    if ( !self.pers["prone_spin"] )
     {
         self.pers["prone_spin"] = true;
         setDvar( "bg_prone_yawcap", 360 );
@@ -463,13 +473,13 @@ proneSpinToggle()
         setDvar( "bg_prone_yawcap", 85 );
     }
 
-    if( self.pers["bool_text"] )
+    if ( self.pers["bool_text"] )
         self iPrintLnBold( "Prone Spins: " + boolToText( self.pers["prone_spin"] ) );
 }
 
 ladderSpinToggle()
 {
-    if( !self.pers["ladder_spin"] )
+    if ( !self.pers["ladder_spin"] )
     {
         self.pers["ladder_spin"] = true;
         setDvar( "bg_ladder_yawcap", 360 );
@@ -480,7 +490,7 @@ ladderSpinToggle()
         setDvar( "bg_ladder_yawcap", 100 );
     }
 
-    if( self.pers["bool_text"] )
+    if ( self.pers["bool_text"] )
         self iPrintLnBold( "Ladder Spins: " + boolToText( self.pers["ladder_spin"] ) );
 }
 
@@ -503,31 +513,31 @@ lastBullet()
 doPredMala()
 {
     Weap = self getCurrentWeapon();
-    self takeWeapon(Weap);
+    self takeWeapon( Weap );
     self GiveWeapon( "killstreak_predator_missile_mp" );
-    self switchToWeapon("killstreak_predator_missile_mp");
+    self switchToWeapon( "killstreak_predator_missile_mp" );
     wait 0.1;
-    self giveWeapon(Weap,0);
+    self giveWeapon( Weap,0 );
 }
 
 doUavMala()
 {
     Weap = self getCurrentWeapon();
-    self takeWeapon(Weap);
+    self takeWeapon( Weap );
     self GiveWeapon( "killstreak_uav_mp" );
-    self switchToWeapon("killstreak_uav_mp");
+    self switchToWeapon( "killstreak_uav_mp" );
     wait 0.1;
-    self giveWeapon(Weap,0);
+    self giveWeapon( Weap,0 );
 }
 
 doClaymoreMala()
 {
     Weap = self getCurrentWeapon();
-    self takeWeapon(Weap);
+    self takeWeapon( Weap );
     self GiveWeapon( "claymore_mp" );
     self switchToWeapon( "claymore_mp" );
     wait 0.1;
-    self giveWeapon(Weap,0);
+    self giveWeapon( Weap,0 );
 }
 
 doBombMala()

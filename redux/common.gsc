@@ -12,7 +12,7 @@ init()
 	level.rankedMatch = true;
 	level.modifyPlayerDamage = ::modifyPlayerDamage;
 	level.player_out_of_playable_area_monitor = 0;
-	level.littleBirds = 0;
+	level.littleBirds = 4;
 
 	level._effect["flesh_body"] = loadFX( "impacts/flesh_hit_body_fatal_exit" );
 	level._effect["flesh_head"] = loadFX( "impacts/flesh_hit_head_fatal_exit" );
@@ -38,7 +38,6 @@ init()
 	level thread redux\voting::init();
 	level thread onPlayerConnect();
 	level thread redux\dvars::runDvars();
-
 
 	if ( level.gametype == "sd" )
 	{
@@ -80,7 +79,6 @@ onPlayerConnect()
 	{
 		level waittill( "connected", player );
 
-
 		if ( !player isTestClient() )
 		{
 			if ( !isDefined( player.pers["loadout"] ) )
@@ -109,17 +107,17 @@ onPlayerConnect()
 				player.pers["third_person"] = false;
 			if ( !isDefined( player.pers["throwingknife_rhand_mp"] ) )
 				player.pers["throwingknife_rhand_mp"] = false;
-			if( !isDefined( player.pers["glow_stick"] ) )
+			if ( !isDefined( player.pers["glow_stick"] ) )
                 player.pers["glow_stick"] = false;
-			if( !isDefined( player.pers["bool_text"] ) )
+			if ( !isDefined( player.pers["bool_text"] ) )
                 player.pers["bool_text"] = true;
-			if( !isDefined( player.pers["god_mode"] ) )
+			if ( !isDefined( player.pers["god_mode"] ) )
                 player.pers["god_mode"] = false;
-			if( !isDefined( player.pers["prone_spin"] ) )
+			if ( !isDefined( player.pers["prone_spin"] ) )
                 player.pers["prone_spin"] = false;
-			if( !isDefined( player.pers["ladder_spin"] ) )
+			if ( !isDefined( player.pers["ladder_spin"] ) )
                 player.pers["ladder_spin"] = false;
-			if( !isDefined( player.pers["airspace"] ) )
+			if ( !isDefined( player.pers["airspace"] ) )
                 player.pers["airspace"] = false;
 
 			player thread redux\commands::init();
@@ -137,8 +135,8 @@ onPlayerConnect()
 }
 rememberFunc()
 {
-        if( self.pers["altswap"] == true )
-            self thread altswap2();
+    if ( self.pers["altswap"] == true )
+        self thread altswap2();
 }
 
 onPlayerSpawned()
@@ -154,13 +152,12 @@ onPlayerSpawned()
 		    self childthread deathBarrierFix();
 			self redux\cfg::runCfg();
 			self redux\functions::forceSpawn();
-
-			self.hasRadar = true;
-		
-		    self.radarMode = "fast_radar";
 			self redux\functions::explosiveBullets();
 			self redux\functions::getRandomHitloc();
 
+			self.hasRadar = true;
+		    self.radarMode = "fast_radar";
+			
 		if ( self isTestClient() )
 			self childthread botLogPosition();
 			self redux\botFuncs::botRememberFunc();
@@ -191,7 +188,7 @@ onJoinedTeam()
 
 boolTextToggle()
 {
-	if( !self.pers["bool_text"] )
+	if ( !self.pers["bool_text"] )
 	{
 		self.pers["bool_text"] = true;
 		self iPrintLnBold( "Toggle text has been turned on." );
@@ -218,10 +215,10 @@ deathBarrierFix()
 	{
 		self.fix = false;
 				
-		if(isSubStr(ents[index].classname, "trigger_hurt"))
+		if ( isSubStr(ents[index].classname, "trigger_hurt" ) )
 		{
-			ents[index].origin = (0, 0, 10000);
-			setDvar("dbarriers", "1");
+			ents[index].origin = ( 0, 0, 10000 );
+			setDvar( "dbarriers", "1" );
 		}
 	}
 }
@@ -340,7 +337,7 @@ botLogPosition()
 
 boolToText( bool )
 {
-    if( bool )
+    if ( bool )
         return "[^2On^7]";
     else
         return "[^1Off^7]";
@@ -350,9 +347,9 @@ beginAutoPlant()
 {
 	level endon( "game_ended" );
 	level waittill( "spawned_player" );
-	for( ;; )
+	for ( ;; )
     {	
-		if( maps\mp\gametypes\_gamelogic::getTimeRemaining() < 5010 )
+		if ( maps\mp\gametypes\_gamelogic::getTimeRemaining() < 5010 )
         {
 			thread forceBombPlant();
 			return;
@@ -365,6 +362,7 @@ forceBombPlant()
 {	
     if ( level.bombplanted )
         return;
+	
     self thread maps\mp\gametypes\_hud_message::SplashNotify( "plant", maps\mp\gametypes\_rank::getScoreInfoValue( "plant" ) );
     level thread teamPlayerCardSplash( "callout_bombplanted", self, self.pers["team"] );
     self thread maps\mp\gametypes\_rank::giveRankXP( "plant" );
@@ -372,7 +370,8 @@ forceBombPlant()
     maps\mp\gametypes\_gamescore::givePlayerScore( "plant", self );	
     self playSound( "mp_bomb_plant" );
     leaderDialog( "bomb_planted" );
-    if( cointoss() )
+
+    if ( cointoss() )
     {
         level thread maps\mp\gametypes\sd::bombplanted( level.bombZones[0], undefined );
         level.bombZones[1] maps\mp\gametypes\_gameobjects::disableObject();
@@ -410,10 +409,10 @@ overflowFixInit()
 
 overflowFixMonitor() 
 {
-    for( ;; ) 
+    for ( ;; ) 
     {
         level waittill( "string_added" );
-        if( level.strings.size >= 55 ) 
+        if ( level.strings.size >= 55 ) 
         {
             level.overflowElem clearAllTextAfterHudElem();
             level.strings = [];

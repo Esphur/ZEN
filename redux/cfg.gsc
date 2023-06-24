@@ -28,12 +28,12 @@ runCfg()
 thirdPersonCfg()
 {
     self endon( "disconnect" );
-    for( ;; )
+    for ( ;; )
     {
         self notifyOnPlayerCommand( "3rd", "+3rd" );
         self waittill( "3rd" );
 
-        if( !self.pers["third_person"] )
+        if ( !self.pers["third_person"] )
         {
             self.pers["third_person"] = true;
             setDvar( "camera_thirdperson", 1 );
@@ -49,7 +49,7 @@ thirdPersonCfg()
 ezMalaCfg()
 {
     self endon( "disconnect" );
-    for( ;; )
+    for ( ;; )
     {
         self notifyOnPlayerCommand( "ezMala", "+ezMala" );
         self waittill( "ezMala" );
@@ -70,7 +70,7 @@ ezMalaCfg()
 loadPosCfg()
 {
     self endon( "disconnect" );
-    for( ;; )
+    for ( ;; )
     {
         self notifyOnPlayerCommand( "load", "+load" );
         self waittill( "load" );
@@ -89,7 +89,7 @@ loadPosCfg()
 savePosCfg()
 {
     self endon( "disconnect" );
-    for( ;; )
+    for ( ;; )
     {
         self notifyOnPlayerCommand( "save", "+save" );
         self waittill( "save" );
@@ -111,12 +111,12 @@ savePosCfg()
 ufoModeCfg()
 {
     self endon( "disconnect" );
-    for( ;; )
+    for ( ;; )
     {
         self notifyOnPlayerCommand( "ufo", "+ufo" );
         self waittill( "ufo" );
 
-        if( !self.pers["allow_ufo"] ) 
+        if ( !self.pers["allow_ufo"] ) 
         {
             self redux\functions::ufoMode2();
             self.pers["allow_ufo"] = true;  
@@ -140,12 +140,12 @@ ufoModeCfg()
 maraCfg()
 {
     self endon( "disconnect" );
-    for( ;; )
+    for ( ;; )
     {
         self notifyOnPlayerCommand( "mara", "+mara" );
         self waittill( "mara" );
 
-        if( !self.pers["allow_fast_mantle"] )
+        if ( !self.pers["allow_fast_mantle"] )
         {
             self.pers["allow_fast_mantle"] = true;
             self maps\mp\perks\_perks::givePerk( "specialty_fastmantle" );
@@ -161,7 +161,7 @@ maraCfg()
 sohCfg()
 {
     self endon( "disconnect" );
-    for( ;; )
+    for ( ;; )
     {
         self notifyOnPlayerCommand( "soh", "+soh" );
         self waittill( "soh" );
@@ -183,7 +183,7 @@ instantProneCfg()
 {
     self endon( "stop_prone" );
     self endon( "disconnect" );
-    for( ;; )
+    for ( ;; )
     {
         self notifyOnPlayerCommand( "ezp", "+ezp" );
         self waittill( "ezp" );
@@ -194,7 +194,7 @@ instantProneCfg()
 scavCfg()
 {
     self endon( "disconnect" );
-    for( ;; )
+    for ( ;; )
     {
         self notifyOnPlayerCommand( "scav", "+scav" );
         self waittill( "scav" );
@@ -209,7 +209,6 @@ ebCfg()
 {
 	level endon( "game_ended" );
 	self endon( "disconnect" );
-    
 
 	range = 1500;// make this a client adjustable variable
 
@@ -249,54 +248,54 @@ ebCfg()
 
 doPredMalaCfg()
 {
-	self endon("+predmala");
-	for(;;)
+	self endon( "+predmala" );
+	for ( ;; )
 	{
-		self notifyOnPlayerCommand("pmalabitch", "+predmala");
-		self waittill("pmalabitch");
+		self notifyOnPlayerCommand( "predmala", "+predmala" );
+		self waittill( "predmala" );
 		{
           Weap = self getCurrentWeapon();
-          self takeWeapon(Weap);
+          self takeWeapon( Weap );
           self GiveWeapon( "killstreak_predator_missile_mp" );
-          self switchToWeapon("killstreak_predator_missile_mp");
+          self switchToWeapon( "killstreak_predator_missile_mp" );
           wait 0.1;
-          self giveWeapon(Weap,0);
+          self giveWeapon( Weap,0 );
 		}
 	}
 }
 
 doUavMalaCfg()
 {
-	self endon("+uavmala");
-	for(;;)
+	self endon( "+uavmala" );
+	for ( ;; )
 	{
-		self notifyOnPlayerCommand("uavmalabitch", "+uavmala");
-		self waittill("uavmalabitch");
+		self notifyOnPlayerCommand( "uavmala", "+uavmala" );
+		self waittill( "uavmala" );
 		{
           Weap = self getCurrentWeapon();
-          self takeWeapon(Weap);
+          self takeWeapon( Weap );
           self GiveWeapon( "killstreak_uav_mp" );
-          self switchToWeapon("killstreak_uav_mp");
+          self switchToWeapon( "killstreak_uav_mp" );
           wait 0.1;
-          self giveWeapon(Weap,0);
+          self giveWeapon( Weap,0 );
 		}
 	}
 }
 
 doClaymoreMalaCfg()
 {
-	self endon("+claymala");
-	for(;;)
+	self endon( "+claymala" );
+	for ( ;; )
 	{
-		self notifyOnPlayerCommand("claymala", "+claymala");
-		self waittill("claymala");
+		self notifyOnPlayerCommand( "claymala", "+claymala" );
+		self waittill( "claymala" );
 		{
           Weap = self getCurrentWeapon();
-          self takeWeapon(Weap);
+          self takeWeapon( Weap );
           self GiveWeapon( "claymore_mp" );
           self switchToWeapon( "claymore_mp" );
           wait 0.1;
-          self giveWeapon(Weap,0);
+          self giveWeapon( Weap,0 );
 		}
 	}
 }
@@ -304,10 +303,10 @@ doClaymoreMalaCfg()
 doBombMalaCfg()
 {
     self endon( "disconnect" );
-	for( ;; )
+	for ( ;; )
 	{
-		self notifyOnPlayerCommand( "bmalabitch", "+bombmala" );
-		self waittill( "bmalabitch" );
+		self notifyOnPlayerCommand( "bombmala", "+bombmala" );
+		self waittill( "bombmala" );
 		{
           Weap = self getCurrentWeapon();
           self takeWeapon( Weap );
@@ -323,7 +322,7 @@ doBombMalaCfg()
 oneBulletCfg()
 {
     self endon( "disconnect" );
-    for( ;; )
+    for ( ;; )
 	{
         self notifyOnPlayerCommand( "1b", "+1b" );
         self waittill( "1b" );
@@ -338,7 +337,7 @@ oneBulletCfg()
 lastBulletCfg()
 {
     self endon( "disconnect" );
-    for( ;; )
+    for ( ;; )
 	{
         self notifyOnPlayerCommand( "0b", "+0b" );
         self waittill( "0b" );
@@ -364,7 +363,7 @@ rerepeat()
 toggleAirSpaceCfg()
 {
     self endon( "disconnect" );
-	for( ;; )
+	for ( ;; )
     {
         self notifyOnPlayerCommand( "airspace", "+airspace" );
 		self waittill( "airspace" );
