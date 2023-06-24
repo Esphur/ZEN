@@ -17,20 +17,20 @@ getWaypoints( mapname )
 		redux\common::consolePrint( "Waypoints", "No gametype specific waypoints available, defaulting." );
 		filename = "waypoints/" + mapname + ".csv";
 		if ( !fileExists( filename ) )
-			return false;
+		    return false;
 	}
 
 	result = spawnStruct();
 	result.lines = [];
 
 	if ( openFile( filename, "read" ) == -1 )
-		return false;
+	    return false;
 
 	for ( ;; )
 	{
 		line = readStream();
 		if ( !isDefined( line ) )
-			break;
+		    break;
 
 		result.lines[result.lines.size] = line;
 	}
@@ -38,7 +38,7 @@ getWaypoints( mapname )
 	closeFile();
 
 	if ( result.lines.size == 0 )
-		return false;
+	    return false;
 
 	waypointCount = int( result.lines[0] );
 	waypoints = [];
